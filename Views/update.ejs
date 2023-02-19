@@ -79,7 +79,7 @@
         Update</button>
 
     </div>
-    <form method="post" id="insert-form">
+    <form action="/update" method="post" id="insert-form">
       <div class="form-floating">
         <input type="text" id="insert-word" name="word" class="form-control" aria-label="With textarea"
           placeholder="Enter a word">
@@ -95,10 +95,10 @@
       </div>
     </form>
 
-    <form method="post" id="delete-update-form">
+    <form action="/" method="post" id="delete-update-form">
       <div class="form-floating">
 
-        <input type="text" id="find-word" name="find_word" class="form-control" aria-label="Find word"
+        <input type="text" id="find-word" name="searchTerm" class="form-control" aria-label="Find word"
           placeholder="find the word">
         <label for="find-word">Find Word</label>
         <div class="d-grid gap-2 d-md-block">
@@ -107,78 +107,79 @@
         </div>
       </div>
     </form>
+
+
+
+
+    <% if (results.length> 0) { %>
+
+      <h2>Word Founds are '<%= searchTerm %>'</h2>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Words</th>
+              <th>Define</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results.forEach(function(result) { %>
+              <tr>
+                <th>
+                  <strong>
+                    <%= result.Word %> :
+                  </strong>
+                </th>
+                <td>
+                  <%= result.Definition %>
+                </td>
+                <td>
+                  <form action="/delete" method="post">
+                    <button type="submit" name="action" value='<%= result._id  %>'>Delete</button>
+                  </form>
+                </td>
+                <td>
+                  <button onclick='showUpdateForm("<%= result._id %>")'>Update</button>
+
+                  <form method="post" action="/updateElement" id="<%= result._id %>" , style=" display:none; ">
+                    <input type="text" placeholder="update word" name="word">
+                    <textarea name="definition" placeholder="update define"></textarea>
+                    <button type="submit" name="action" value='<%= result._id %>'>Update</button>
+                  </form>
+                </td>
+              </tr>
+
+
+              <% } );%>
+
+          </tbody>
+        </table>
+        <% } %>
+      </div>
   </div>
 
+  <script>
+    const showForm1 = document.getElementById('insert-form');
+    const showForm2 = document.getElementById('delete-update-form');
+    function showForm(btn) {
 
+      showForm1.style.display = 'none';
+      showForm2.style.display = 'none';
+      if (btn == 'insert-form-show-btn') {
+        showForm1.style.display = 'block';
+      }
 
-  <% if (results.length> 0) { %>
+      else showForm2.style.display = 'block';
+    };
 
-    <h2>Word Founds are '<%= find_word %>'</h2>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Words</th>
-            <th>Define</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% results.forEach(function(result) { %>
-            <tr>
-              <th>
-                <strong>
-                  <%= result.Word %> :
-                </strong>
-              </th>
-              <td>
-                <%= result.Definition %>
-              </td>
-              <td>
-                <form method="post">
-                  <button type="submit" name="action" value='<%= {type :"delete", id:result._id } %>'>Delete</button>
-                </form>
-              </td>
-              <td>
-                <button onclick='showUpdateForm("<%= result._id %>")'>Update</button>
-
-                <form method="post" id="<%= result._id %>" , display="none">
-                  <input type="text" placeholder="update word" name="word">
-                  <textarea name="definition" placeholder="update define"></textarea>
-                  <button type="submit" name="action" value='<%= {type :"update", id:result._id} %>'>Update</button>
-                </form>
-              </td>
-            </tr>
-
-
-            <% } );%>
-
-        </tbody>
-      </table>
-      <% } %>
-        
-
-          <script>
-            const showForm1 = document.getElementById('insert-form');
-            const showForm2 = document.getElementById('delete-update-form');
-            function showForm(btn) {
-
-              showForm1.style.display = 'none';
-              showForm2.style.display = 'none';
-              if (btn == 'insert-form-show-btn') {
-                showForm1.style.display = 'block';
-              }
-
-              else showForm2.style.display = 'block';
-            };
-
-            function showUpdateForm(formId) {
-              const updateForm = document.getElementById(formId);
-              updateForm.style.display = 'block';
-            }
-          </script>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-            </script>
+    function showUpdateForm(formId) {
+      const updateForm = document.getElementById(formId);
+      updateForm.style.display = 'block';
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
