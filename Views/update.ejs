@@ -4,6 +4,7 @@
 <head>
   <meta charset="UsTF-8">
   <title>Dictionary Changes</title>
+  <!-- CSS -->
   <style>
     #insert-form {
       display: none;
@@ -12,13 +13,20 @@
     #delete-update-form {
       display: none;
     }
-  </style> -->
+
+    .myClass {
+      margin: auto;
+      padding: auto;
+      width: 40rem;
+    }
+  </style>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 
 <body>
   <header>
+    <!-- navigation bar -->
     <nav class="navbar navbar-dark bg-dark fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="http://localhost:5050/"> <img
@@ -64,6 +72,10 @@
         </div>
       </div>
     </nav>
+    
+    
+    <!-- heading -->
+
   </header>
   <div class="container-xxl bd-gutter mt-3 my-md-4 bd-layout">
     <br><br>
@@ -72,32 +84,38 @@
     </h1>
 
     <div class="btn-group" role="group" aria-label="Basic outlined example">
-
+      <!-- button to select insert, delete or update operation -->
       <button class="btn btn-outline-primary" id="bt1" onclick='showForm("insert-form-show-btn")'>Insert</button>
-
-      <button class="btn btn-outline-primary" onclick="showForm('delete-update-form-show-btn')">Delete Or
-        Update</button>
+      <button class="btn btn-outline-primary" onclick="showForm('delete-update-form-show-btn')">Delete Or Update</button>
 
     </div>
-    <form action="/update" method="post" id="insert-form">
-      <div class="form-floating">
-        <input type="text" id="insert-word" name="word" class="form-control" aria-label="With textarea"
-          placeholder="Enter a word">
-        <label for="floatingInput">Word</label>
-      </div>
-      <div class="form-floating mb-3">
-        <textarea id="definitionId" name="definition" class="form-control" aria-label="With textarea"
-          placeholder="define"></textarea>
-        <label for="definitionId">Define</label>
-        <div class="d-grid gap-2 d-md-block">
-          <button type="submit" class="btn btn-primary" name="action" value="insert" id="insert-btn">Insert</button>
-        </div>
-      </div>
-    </form>
+      
 
+    <!-- form to insert the data -->
+    <div class="myClass">
+      <!-- taking word and definition in form and then post  -->
+      <form action='/update' method="post" id="insert-form">
+        <div class="form-floating">
+          
+          <input type="text" id="insert-word" name="word" class="form-control" aria-label="With textarea"
+            placeholder="Enter a word">
+          <label for="insert-word">Word</label>
+        </div>
+        <div class="form-floating mb-3">
+          <textarea id="definitionId" name="definition" class="form-control" aria-label="With textarea"
+            placeholder="define"></textarea>
+          <label for="definitionId">Define</label>
+          <div class="d-grid gap-2 d-md-block">
+            <button type="submit" class="btn btn-primary" name="action" id="insert-btn">Insert</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+ <!-- first find the _id of the element to be deleted so search the word  -->
+  <div class="myClass">
     <form action="/" method="post" id="delete-update-form">
       <div class="form-floating">
-
         <input type="text" id="find-word" name="searchTerm" class="form-control" aria-label="Find word"
           placeholder="find the word">
         <label for="find-word">Find Word</label>
@@ -107,10 +125,8 @@
         </div>
       </div>
     </form>
-
-
-
-
+    </div>
+   <!-- after searching the word its data is rendered and we select its _id then post the request to delete or update by using id bcz _id is unique -->
     <% if (results.length> 0) { %>
 
       <h2>Word Founds are '<%= searchTerm %>'</h2>
@@ -134,17 +150,20 @@
                   <%= result.Definition %>
                 </td>
                 <td>
+                  <!-- delete button -->
                   <form action="/delete" method="post">
-                    <button type="submit" name="action" value='<%= result._id  %>'>Delete</button>
+                    <button type="submit" name="action" class="btn btn-primary"
+                      value='<%= result._id  %>'>Delete</button>
                   </form>
                 </td>
                 <td>
-                  <button onclick='showUpdateForm("<%= result._id %>")'>Update</button>
-
+                  <!-- update form -->
+                  <button class="btn btn-primary" onclick='showUpdateForm("<%= result._id %>")'>Update</button>
                   <form method="post" action="/updateElement" id="<%= result._id %>" , style=" display:none; ">
                     <input type="text" placeholder="update word" name="word">
                     <textarea name="definition" placeholder="update define"></textarea>
-                    <button type="submit" name="action" value='<%= result._id %>'>Update</button>
+                    <button type="submit" class="btn btn-primary" name="action"
+                      value='<%= result._id %>'>Update</button>
                   </form>
                 </td>
               </tr>
@@ -161,8 +180,9 @@
   <script>
     const showForm1 = document.getElementById('insert-form');
     const showForm2 = document.getElementById('delete-update-form');
+    
+    // function to show the Element which is hidden and shown on click
     function showForm(btn) {
-
       showForm1.style.display = 'none';
       showForm2.style.display = 'none';
       if (btn == 'insert-form-show-btn') {
